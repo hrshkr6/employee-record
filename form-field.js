@@ -157,18 +157,14 @@ class FormField extends PolymerElement {
   _handleEmployeeEdited() {
     const index = this.editIndex;
     if (index >= 0) {
-      this.task1 = this.taskList[index][0].task;
-      this.task2 = this.taskList[index][1].task;
-      this.task3 = this.taskList[index][2].task;
-      this.task4 = this.taskList[index][3].task;
+      for (let i = 1; i <= 4; i++) {
+        this["task" + i] = this.taskList[index][i-1].task;
+      }      
     }
   }
 
   validateForm() {
-    const task1 = this.task1;
-    const task2 = this.task2;
-    const task3 = this.task3;
-    const task4 = this.task4;
+    const [task1, task2, task3, task4] = [this.task1, this.task2, this.task3, this.task4];
     let isValid = true;
 
     if (!task1.trim()) {
@@ -217,10 +213,10 @@ class FormField extends PolymerElement {
           this.modify = false;
         } else {
           this.modify = true;
-          this.set(`taskList.${index}.0.task`, this.task1);
-          this.set(`taskList.${index}.1.task`, this.task2);
-          this.set(`taskList.${index}.2.task`, this.task3);
-          this.set(`taskList.${index}.3.task`, this.task4);
+          const taskItems = [this.task1, this.task2, this.task3, this.task4];
+          taskItems.forEach((task, i) => {
+            this.set(`taskList.${index}.${i}.task`, task);
+          });          
           this.editIndex = -1;
           // Clear the input fields
           this.clearInputs();
@@ -242,10 +238,9 @@ class FormField extends PolymerElement {
     }
   }
   clearInputs() {
-    this.task1 = "";
-    this.task2 = "";
-    this.task3 = "";
-    this.task4 = "";
+    for (let i = 1; i <= 4; i++) {
+      this["task" + i] = "";
+    }
   }
 
   clearTasks() {
